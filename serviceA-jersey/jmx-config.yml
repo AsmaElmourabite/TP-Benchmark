@@ -1,0 +1,72 @@
+---
+rules:
+  # Métriques JVM de base
+  - pattern: 'java.lang<type=Memory><>(.*):'
+    name: jvm_memory_$1
+    type: GAUGE
+    labels:
+      type: "$1"
+  
+  - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(.*):'
+    name: jvm_memory_heap_$1
+    type: GAUGE
+  
+  - pattern: 'java.lang<type=Memory><NonHeapMemoryUsage>(.*):'
+    name: jvm_memory_nonheap_$1
+    type: GAUGE
+  
+  # Métriques de threads
+  - pattern: 'java.lang<type=Threading><ThreadCount>'
+    name: jvm_threads_current
+    type: GAUGE
+  
+  - pattern: 'java.lang<type=Threading><PeakThreadCount>'
+    name: jvm_threads_peak
+    type: GAUGE
+  
+  - pattern: 'java.lang<type=Threading><TotalStartedThreadCount>'
+    name: jvm_threads_started_total
+    type: COUNTER
+  
+  # Métriques de garbage collection
+  - pattern: 'java.lang<type=GarbageCollector, name=(.*)><CollectionCount>'
+    name: jvm_gc_collections_total
+    type: COUNTER
+    labels:
+      gc: "$1"
+  
+  - pattern: 'java.lang<type=GarbageCollector, name=(.*)><CollectionTime>'
+    name: jvm_gc_collection_seconds_total
+    type: COUNTER
+    labels:
+      gc: "$1"
+  
+  # Métriques de classes
+  - pattern: 'java.lang<type=ClassLoading><LoadedClassCount>'
+    name: jvm_classes_loaded
+    type: GAUGE
+  
+  - pattern: 'java.lang<type=ClassLoading><TotalLoadedClassCount>'
+    name: jvm_classes_loaded_total
+    type: COUNTER
+  
+  - pattern: 'java.lang<type=ClassLoading><UnloadedClassCount>'
+    name: jvm_classes_unloaded_total
+    type: COUNTER
+  
+  # Métriques de runtime
+  - pattern: 'java.lang<type=Runtime><Uptime>'
+    name: jvm_uptime_seconds
+    type: GAUGE
+  
+  - pattern: 'java.lang<type=Runtime><StartTime>'
+    name: jvm_start_time_seconds
+    type: GAUGE
+  
+  # Métriques HikariCP (si disponibles via JMX)
+  - pattern: 'com.zaxxer.hikari<type=Pool, name=(.*)><(.*)>'
+    name: hikaricp_$2
+    type: GAUGE
+    labels:
+      pool: "$1"
+
